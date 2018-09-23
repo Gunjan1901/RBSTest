@@ -40,7 +40,7 @@ public class SeMethods implements WdMethods{
 	public SeMethods() {
 		prop = new Properties();
 		try {
-			prop.load(new FileInputStream(new File("./src/test/resources/Xpath/xpath.properties")));
+			prop.load(new FileInputStream(new File("./src/test/resources/LocatorValues/Object.properties")));
 			} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
