@@ -1,10 +1,12 @@
 package commonMethods;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 //import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +23,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -32,12 +35,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class SeMethods implements WdMethods{
 	protected static RemoteWebDriver driver;	
 	int i = 1;
+	public Properties prop;
+	
+	public SeMethods() {
+		prop = new Properties();
+		try {
+			prop.load(new FileInputStream(new File("./src/test/resources/Xpath/xpath.properties")));
+			} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public void startApp(String browser, String url) {
-
+		ChromeOptions op = new ChromeOptions();
+		op.addArguments("disable-infobars");
 		try {
 			if (browser.equalsIgnoreCase("chrome")) {
 				System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
-				driver = new ChromeDriver();			
+				driver = new ChromeDriver(op);			
 			} else {
 				System.setProperty("webdriver.gecko.driver", "./drivers/geckodriver.exe");
 				driver = new FirefoxDriver();

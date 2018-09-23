@@ -13,7 +13,7 @@ public class AccountUpdate extends SeMethods {
 	@And("^the user clicks on My Personal Information tab in Homepage$")
 	public void the_user_clicks_on_My_Personal_Information_tab_in_Homepage() throws Throwable {
 
-		WebElement personalInfo = locateElement("xpath", "//span[text()='My personal information']");
+		WebElement personalInfo = locateElement("xpath", prop.getProperty("personalInformation"));
 		click(personalInfo);
 	}
 
@@ -22,10 +22,10 @@ public class AccountUpdate extends SeMethods {
 
 		/*********** Locating first Name and updating the name*********************/
 
-		WebElement fName = locateElement("firstname");
-		type(fName, firstName);
+		WebElement fName1 = locateElement(prop.getProperty("fName"));
+		type(fName1, firstName);
 		Name = firstName;
-		WebElement passwd = locateElement("old_passwd");
+		WebElement passwd = locateElement(prop.getProperty("password"));
 		type(passwd, "Password123");
 
 	}
@@ -33,7 +33,7 @@ public class AccountUpdate extends SeMethods {
 	@And("^clicks on save button$")
 	public void clicks_on_save_button() throws Throwable {
 
-		WebElement save = locateElement("xpath", "//span[text()='Save']");
+		WebElement save = locateElement("xpath", prop.getProperty("saveButton"));
 		click(save);
 
 
@@ -43,17 +43,17 @@ public class AccountUpdate extends SeMethods {
 	public void the_first_name_is_updated() throws Throwable {
 
 		/************Navigating back to my account************/
-		WebElement accntBack = locateElement("xpath", "//i[@class='icon-chevron-left']");
+		WebElement accntBack = locateElement("xpath", prop.getProperty("BackToAccounts"));
 		click(accntBack);
-		
+
 		/********Clicking on personal Information tab and taking first name to validate the update****************/
-		
-		WebElement personalInfo = locateElement("xpath", "//span[text()='My personal information']");
+
+		WebElement personalInfo = locateElement("xpath", prop.getProperty("personalInformation"));
 		click(personalInfo);
-		
+
 		WebElement fName1=locateElement("firstname");
 		String updatedName = getAttribute(fName1, "value");
-		
+
 		if(updatedName.equals(Name))
 			System.out.println("Name is updated properly");
 		else

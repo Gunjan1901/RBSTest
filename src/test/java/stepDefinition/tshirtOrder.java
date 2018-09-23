@@ -3,8 +3,10 @@ package stepDefinition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
@@ -33,7 +35,7 @@ public class tshirtOrder extends SeMethods {
 	WebElement password = locateElement("passwd");
 	type(id, uname);
 	type(password, passwd);
-	WebElement signIn = locateElement("xpath", "//i[@class='icon-lock left']");
+	WebElement signIn = locateElement("xpath", prop.getProperty("signInButton"));
 	click(signIn);
 		
 	    
@@ -49,23 +51,34 @@ public class tshirtOrder extends SeMethods {
 
 	@When("^the user selects a tshirt$")
 	public void the_user_selects_a_tshirt() throws Throwable {
-		WebElement tshirt = locateElement("xpath", "(//a[@title='T-shirts'])[2]");
+		
+		/*********Clicking on thsirt link in home page****************/
+		
+		WebElement tshirt = locateElement("xpath", prop.getProperty("tshirtLink"));
 		click(tshirt);
 		
-		WebElement product = locateElement("xpath", "(//a[@title='Faded Short Sleeve T-shirts'])[2]");
-		ScrollByVisibleElement(product);
+		/**************Scrolling down the web page Hovering on the tshirt image and clicking on the tshirt**************/
 		
+		WebElement product = locateElement("xpath", prop.getProperty("tshirtImage"));
+		ScrollByVisibleElement(product);
 		mouseHover(product, product);
 		
-		WebElement tshirtN = locateElement("xpath", "//h1[text()='Faded Short Sleeve T-shirts']");
+		/******Getting the tshirt name**************/
+		
+		WebElement tshirtN = locateElement("xpath", prop.getProperty("tshirtName"));
 		String tshirtName = getText(tshirtN);
 		
-		WebElement qty = locateElement("xpath", "//i[@class='icon-plus']");
+		/***********Increasing the quantity of tshirt and selecting the size************/
+		
+		WebElement qty = locateElement("xpath", prop.getProperty("QuantityIcon"));
 		click(qty);
 		
-		WebElement ddSize = locateElement("group_1");
+		WebElement ddSize = locateElement(prop.getProperty("sizeDropdown"));
 		selectDropDownUsingText(ddSize, "L");
-		WebElement addToCart = locateElement("add_to_cart");
+		
+		/*********Adding the product to cart**************/
+		
+		WebElement addToCart = locateElement(prop.getProperty("cartAdd"));
 		click(addToCart);
 		System.out.println("Product successfully added to cart");
 		
@@ -77,35 +90,35 @@ public class tshirtOrder extends SeMethods {
 	   
 		/********Clicking on Proceed to Checkout after Adding to Cart***********/
 		
-		WebElement ptc = locateElement("xpath", "//a[@class='btn btn-default button button-medium']");
+		WebElement ptc = locateElement("xpath", prop.getProperty("proceedToChkout"));
 	   clickWithNoSnap(ptc);
 	   
 	   /*********Clicking on Proceed to Checkout in Summary tab*************/
 	   
-	   WebElement chkoutSummary = locateElement("xpath", "//span[text()='Proceed to checkout']");
+	   WebElement chkoutSummary = locateElement("xpath", prop.getProperty("proceedToChkout1"));
 	   click(chkoutSummary);
 	   
 	   /**********Clicking on Proceed to Checkout in Address tab***********/
 	   
-	   WebElement chkoutAddress = locateElement("xpath", "//span[text()='Proceed to checkout']");
+	   WebElement chkoutAddress = locateElement("xpath", prop.getProperty("proceedToChkout1"));
 	   click(chkoutAddress);
 	  
 	   /*********Clicking on Terms of Service Checkbox************/
 	   
-	   WebElement chkbox = locateElement("xpath", "//input[@type='checkbox']");
+	   WebElement chkbox = locateElement("xpath", prop.getProperty("checkbox"));
 	   ScrollByVisibleElement(chkbox);
 	   clickWithNoSnap(chkbox);
 	   
 	   /********Clicking on Checkout in Shipping tab*************/
 	   
-	   WebElement chkoutShipping = locateElement("xpath", "//button[@class='button btn btn-default standard-checkout button-medium']");
+	   WebElement chkoutShipping = locateElement("xpath", prop.getProperty("shippingChkout"));
 	   click(chkoutShipping);
 	   
 	   /**********Selecting payment mode and confirming the order*************/
 	   
-	   WebElement paymentMode = locateElement("xpath", "//a[@title='Pay by bank wire']");
+	   WebElement paymentMode = locateElement("xpath", prop.getProperty("paymode"));
 	   click(paymentMode);
-	   WebElement confirmOrder = locateElement("xpath", "//span[text()='I confirm my order']");
+	   WebElement confirmOrder = locateElement("xpath", prop.getProperty("orderConfirm"));
 	   click(confirmOrder);
 	   
 	}
@@ -115,19 +128,19 @@ public class tshirtOrder extends SeMethods {
 	 
 		/********Going to order page after placing order and taking the text present in order box**********/
 		
-		WebElement orderBox = locateElement("xpath", "//div[@class='box']");
+		WebElement orderBox = locateElement("xpath", prop.getProperty("orderBox"));
 		String OrderText = getText(orderBox);
 			
 		/********Going back to Order history to validate the order****************/
 		
-		WebElement orderHist = locateElement("xpath", "//a[@title='Back to orders']");
+		WebElement orderHist = locateElement("xpath", prop.getProperty("backToOrders"));
 		click(orderHist);
 		Thread.sleep(20000);
 		
 		/********************All the order id's are in 1st Column of Order History table, 
 		  			taking all the order reference to validate************************************/
-		 
-		WebElement orderTable = driver.findElementById("order-list");
+		try { 
+		WebElement orderTable = driver.findElementById(prop.getProperty("orderTable"));
 		
 		List<WebElement> allRows = orderTable.findElements(By.tagName("tr"));
 		
@@ -149,6 +162,11 @@ public class tshirtOrder extends SeMethods {
 			else
 				System.err.println("Order id is not present in Order History");
 			
+		}
+		}
+		catch(WebDriverException e)
+		{
+			System.err.println("Unknown exception occured while loading the order History page :" +e.getMessage());
 		}
 		
 		
