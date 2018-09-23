@@ -174,6 +174,25 @@ public interface WdMethods {
 		 * @author Gunjan Prakash - Infosys
 		 * @return 
 		 */
+		
+		public void mouseHover(WebElement source, WebElement target);
+		
+		/**
+		 * This method will mousehover on a particular source
+		 * @param source - The source element where we mousehover is done
+		 *  @param target - The target element where it's clicked after mousehover
+		 * @throws NoSuchElementException, WebDriverException
+		 */
+		
+		public void ScrollByVisibleElement(WebElement ele);
+		
+		/**
+		 * This method will scroll on the page based on a particular element availability
+		 * @param ele - The element based on which scrolling is done
+		 * @author Gunjan Prakash - Infosys
+		 * @throws NoSuchElementException, WebDriverException
+		 */
+		
 		public long takeSnap();
 			
 		/**
@@ -183,10 +202,16 @@ public interface WdMethods {
 		public void closeBrowser();		
 		
 		/**
-		 * This method will close all the browsers
+		 * This method will close the current browser
 		 * @author Gunjan Prakash - Infosys
 		 */
 		public void closeAllBrowsers();
+		
+		/**
+		 * This method will close all the opened browsers
+		 * @author Gunjan Prakash - Infosys
+		 */
+		
 
 }
 
